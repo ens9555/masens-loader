@@ -7,7 +7,7 @@
 	loadstring(game:HttpGet("https://raw.githubusercontent.com/USERNAME/REPO/main/Loader.lua"))()
 ]]
 
-local API_URL  = "https://script.google.com/macros/s/AKfycbyGRXJKt8ta_xqiWSbb7POKPO2qu9YDKZ8KRmCDfHv4dKfWsFg4TVf-TiFdMJVQmaBiVQ/exec"  -- hasil Deploy (berakhiran /exec)
+local API_URL  = "https://script.google.com/macros/s/AKfycbwidiFlxGdt5TC03fO1pqJTibAgpQ0sQrfn5eWcWSvxrFUp7_a0owvN2-CWC7sTR5v1CQ/exec"  -- hasil Deploy (berakhiran /exec)
 local BUY_INFO = "Beli key: WhatsApp 0895385590527"             -- teks info beli key
 local KEY_FILE = "MasensDev_Key.txt"                             -- key tersimpan, jadi tidak ketik ulang
 
