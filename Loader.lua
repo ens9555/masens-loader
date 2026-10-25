@@ -8,7 +8,7 @@
 ]]
 
 local API_URL  = "https://script.google.com/macros/s/AKfycbwidiFlxGdt5TC03fO1pqJTibAgpQ0sQrfn5eWcWSvxrFUp7_a0owvN2-CWC7sTR5v1CQ/exec"  -- hasil Deploy (berakhiran /exec)
-local BUY_INFO = "Beli key: WhatsApp 0895385590527"             -- teks info beli key
+local BUY_INFO = "Beli key: WhatsApp 0895385590527"              -- teks info beli key
 local KEY_FILE = "MasensDev_Key.txt"                             -- key tersimpan, jadi tidak ketik ulang
 
 local Players = game:GetService("Players")
@@ -66,7 +66,7 @@ local function new(class, props, parent)
 	i.Parent = parent
 	return i
 end
-local GOLD = Color3.fromRGB(212, 175, 55)
+local GOLD = Color3.fromRGB(245, 180, 80)
 
 local box = new("Frame", {
 	AnchorPoint = Vector2.new(0.5, 0.5), Position = UDim2.fromScale(0.5, 0.5), Size = UDim2.fromOffset(340, 230),
@@ -94,7 +94,7 @@ local input = new("TextBox", {
 new("UICorner", { CornerRadius = UDim.new(0, 6) }, input)
 
 local btn = new("TextButton", {
-	Position = UDim2.fromOffset(20, 122), Size = UDim2.new(1, -40, 0, 34), BackgroundColor3 = Color3.fromRGB(184, 134, 11),
+	Position = UDim2.fromOffset(20, 122), Size = UDim2.new(1, -40, 0, 34), BackgroundColor3 = Color3.fromRGB(225, 29, 72),
 	BorderSizePixel = 0, Text = "VERIFIKASI", Font = Enum.Font.GothamBold, TextSize = 14, TextColor3 = Color3.new(1, 1, 1),
 }, box)
 new("UICorner", { CornerRadius = UDim.new(0, 6) }, btn)
