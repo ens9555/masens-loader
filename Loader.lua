@@ -1,8 +1,8 @@
 --[[
-	MasensDev Premium - Loader (Premium key + Free 6 jam, kunci device)
+	MasensDev Premium - Loader (Premium Key + Free Key 6 Jam via Linkvertise)
 	File INI yang boleh publik (GitHub). Script utama TIDAK ada di sini.
 
-	loadstring(game:HttpGet("https://raw.githubusercontent.com/USERNAME/REPO/main/Loader.lua"))()
+	loadstring(game:HttpGet("https://raw.githubusercontent.com/ens9555/masens-loader/main/Loader.lua"))()
 ]]
 
 local API_URL  = "https://script.google.com/macros/s/AKfycbw8GGnGrdgNAhK_aIb1A83gDX1YPF1q2q2IS9n8wEy9UhdqWc-1ST3fspKxzmx9j_hjeQ/exec"
@@ -27,7 +27,6 @@ local function getHWID()
 	return nil
 end
 
--- params: { key = "..." } untuk premium, { action = "free" } untuk free
 local function call(params)
 	if not req then return false, "Executor kamu tidak mendukung request HTTP" end
 	local hwid = getHWID()
@@ -55,10 +54,9 @@ local function runScript(data)
 end
 
 -- GUI
-for _, parent in ipairs({ playerGui }) do
-	local old = parent:FindFirstChild("MasensKeyGui")
-	if old then old:Destroy() end
-end
+local old = playerGui:FindFirstChild("MasensKeyGui")
+if old then old:Destroy() end
+
 local gui = Instance.new("ScreenGui")
 gui.Name, gui.ResetOnSpawn, gui.IgnoreGuiInset, gui.DisplayOrder = "MasensKeyGui", false, true, 150
 gui.Parent = playerGui
@@ -89,14 +87,14 @@ local title = new("TextLabel", {
 new("UIGradient", { Color = ColorSequence.new(RED, GOLD) }, title)
 new("TextLabel", {
 	BackgroundTransparency = 1, Position = UDim2.fromOffset(0, 42), Size = UDim2.new(1, 0, 0, 18),
-	Text = "Masukkan key premium, atau coba gratis 6 jam", Font = Enum.Font.Gotham, TextSize = 12,
+	Text = "Masukkan key Premium atau Free Key 6 Jam", Font = Enum.Font.Gotham, TextSize = 12,
 	TextColor3 = Color3.fromRGB(140, 140, 158),
 }, box)
 
 local input = new("TextBox", {
 	Position = UDim2.fromOffset(20, 74), Size = UDim2.new(1, -40, 0, 34), BackgroundColor3 = Color3.fromRGB(25, 25, 33),
-	BorderSizePixel = 0, Text = "", PlaceholderText = "MSD-XXXX-XXXX-XXXX", PlaceholderColor3 = Color3.fromRGB(110, 110, 128),
-	Font = Enum.Font.Gotham, TextSize = 14, TextColor3 = Color3.new(1, 1, 1), ClearTextOnFocus = false,
+	BorderSizePixel = 0, Text = "", PlaceholderText = "MSD-XXXX... atau FREE-XXXX...", PlaceholderColor3 = Color3.fromRGB(110, 110, 128),
+	Font = Enum.Font.Gotham, TextSize = 13, TextColor3 = Color3.new(1, 1, 1), ClearTextOnFocus = false,
 }, box)
 new("UICorner", { CornerRadius = UDim.new(0, 8) }, input)
 
@@ -109,8 +107,8 @@ local function mkBtn(text, y, color)
 	new("UICorner", { CornerRadius = UDim.new(0, 8) }, b)
 	return b
 end
-local btn = mkBtn("VERIFIKASI KEY PREMIUM", 118, RED)
-local freeBtn = mkBtn("COBA GRATIS 6 JAM", 160, Color3.fromRGB(44, 44, 58))
+local btn = mkBtn("VERIFIKASI & JALANKAN", 118, RED)
+local freeBtn = mkBtn("GET FREE KEY (6 JAM)", 160, Color3.fromRGB(44, 44, 58))
 freeBtn.TextColor3 = GOLD
 
 local status = new("TextLabel", {
@@ -123,16 +121,16 @@ new("TextLabel", {
 }, box)
 
 local busy = false
-local function attempt(params, isPremium, key)
+local function attempt(key)
 	if busy then return end
 	busy = true
 	status.TextColor3 = GOLD
-	status.Text = "Memeriksa akses..."
-	local ok, result = call(params)
+	status.Text = "Memeriksa key..."
+	local ok, result = call({ key = key })
 	if ok then
-		if isPremium then pcall(function() if writefile then writefile(KEY_FILE, key) end end) end
+		pcall(function() if writefile then writefile(KEY_FILE, key) end end)
 		status.TextColor3 = Color3.fromRGB(52, 211, 153)
-		status.Text = (result.tier == "free") and "Akses FREE aktif! Memuat script..." or "Key valid! Memuat script..."
+		status.Text = (result.tier == "free") and "Free Key aktif! Memuat script..." or "Key valid! Memuat script..."
 		task.wait(0.6)
 		gui:Destroy()
 		runScript(result)
@@ -145,20 +143,41 @@ end
 
 local function tryKey()
 	local key = string.match(input.Text or "", "^%s*(.-)%s*$")
-	if key == "" then status.TextColor3 = Color3.fromRGB(255, 110, 130) status.Text = "Key belum diisi" return end
-	attempt({ key = key }, true, key)
+	if key == "" then
+		status.TextColor3 = Color3.fromRGB(255, 110, 130)
+		status.Text = "Key belum diisi"
+		return
+	end
+	attempt(key)
 end
+
 btn.Activated:Connect(tryKey)
 input.FocusLost:Connect(function(enter) if enter then tryKey() end end)
-freeBtn.Activated:Connect(function() attempt({ action = "free" }, false) end)
 
--- key premium tersimpan: coba otomatis
+freeBtn.Activated:Connect(function()
+	local clip = (getgenv and (getgenv().setclipboard or getgenv().toclipboard)) or setclipboard or toclipboard
+	local copied = false
+	if type(clip) == "function" then
+		copied = pcall(clip, API_URL)
+	end
+	if copied then
+		status.TextColor3 = GOLD
+		status.Text = "Link Get Key disalin! Buka browser & tempel link-nya."
+	else
+		input.Text = API_URL
+		input:CaptureFocus()
+		status.TextColor3 = GOLD
+		status.Text = "Salin link di kotak atas (Ctrl+C), lalu buka di browser."
+	end
+end)
+
+-- Key tersimpan (Premium atau Free yang masih aktif): coba otomatis
 task.spawn(function()
 	local saved
 	pcall(function() if isfile and isfile(KEY_FILE) then saved = readfile(KEY_FILE) end end)
 	saved = saved and string.match(saved, "^%s*(.-)%s*$")
 	if saved and saved ~= "" then
 		input.Text = saved
-		attempt({ key = saved }, true, saved)
+		attempt(saved)
 	end
 end)
